@@ -1,9 +1,11 @@
 import random
 
-
-ratings_file = open('rating.txt')
-ratings = {name: int(rating) for name, rating in [line.split() for line in ratings_file]}
-ratings_file.close()
+ratings = dict()
+with open('ratings.txt', 'a+') as ratings_file:
+    ratings_file.seek(0)
+    for line in ratings_file:
+        name, rating = line.split()
+        ratings[name] = rating
 
 player_name = input('Enter your name: ')
 player_rating = ratings.get(player_name, 0)
@@ -61,4 +63,7 @@ while True:
     else:
         print(f'Sorry, but computer chose {computer}')
 
-print('Bye!')
+ratings[player_name] = player_rating
+with open('ratings.txt', 'w') as ratings_file:
+    for name, rating in ratings.items():
+        ratings_file.write(name + ' ' + str(rating) + '\n')
